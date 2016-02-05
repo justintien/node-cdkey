@@ -216,3 +216,19 @@ describe('fluent template', () => {
         });
     });
 });
+
+describe('endless control', () => {
+    let template = '0'; // 123456789
+    let amount = 10;
+    let regex = /[^0-9]/g;
+    it('generate multi by ' + template, () => {
+        let list = cdkey(template, amount); // [ '3', '5', '9', '7', '4', '2', '8', '6', '1' ]
+        expect(list).to.be.a('array');
+        expect(list.length).to.equal(9);
+        list.forEach((str) => {
+            expect(str).to.be.a('string');
+            expect(str.length).to.equal(template.length);
+            expect(str.search(regex)).to.equal(-1);
+        });
+    });
+});

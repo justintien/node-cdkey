@@ -84,8 +84,19 @@ class Generator {
                 return key;
             };
         }
+        let error = 0;
         for (let i = 0; i < this._amount; i++) {
-            result.push(keygen());
+            let key = keygen();
+            if (result.indexOf(key) === -1) {
+                result.push(key);
+            } else {
+                error++;
+                if (error > 1000) {
+                    console.error('too many error.');
+                    break;
+                }
+                i--;
+            }
         };
         if (this._amount <= 1) {
             return result[0];

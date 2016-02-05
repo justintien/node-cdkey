@@ -56,8 +56,8 @@ cdkey('AAAA', {
 });
 // ABBA
 
-cdkey('AAAA', 2, {
-  A: 'AB'
+cdkey('aaaa', 2, {
+  a: 'ABC'
 });
 // [ 'BCAA', 'ACAB' ]
 
@@ -76,9 +76,9 @@ cdkey(true);
 
 ```javascript
 cdkey(true)
-  .template('AA')
+  .template('AAAA')
   .syntax({
-    A: 'AB'
+    A: 'ABC'
   })
   .amount(2)
   .gen();
