@@ -1,0 +1,36 @@
+{
+  "name": "cdkey",
+  "version": "1.0.0",
+  "description": "generate random strings by template.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/up9cloud/node-cdkey.git"
+  },
+  "keywords": [
+    "generate",
+    "random",
+    "randomstring",
+    "template",
+    "keygen"
+  ],
+  "author": "ss-t.c",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/up9cloud/node-cdkey/issues"
+  },
+  "homepage": "https://github.com/up9cloud/node-cdkey#readme",
+  "engines": {
+    "node": ">=5.5.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  },
+  "dependencies": {
+    "lodash": "^4.2.1"
+  }
+}
