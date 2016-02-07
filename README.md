@@ -1,6 +1,4 @@
-# node-cdkey
-
-<!-- TODO add travis-ci -->
+# node-cdkey [![Build Status](https://travis-ci.org/up9cloud/node-cdkey.svg?branch=master)](https://travis-ci.org/up9cloud/node-cdkey)
 
 generate the random string by template.
 
@@ -189,7 +187,6 @@ npm test
 
 ## TODO
 
-- travis-ci
 - escape string in template.
 - command line support.
 - browser support.
