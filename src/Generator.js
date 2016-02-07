@@ -92,7 +92,7 @@ class Generator {
             } else {
                 error++;
                 if (error > 1000) {
-                    console.error('too many error.');
+                    console.error('over 1000 loop.');
                     break;
                 }
                 i--;

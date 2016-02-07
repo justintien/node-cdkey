@@ -70,10 +70,16 @@ let Cdkey = function (arg1, arg2, arg3) {
         }
     }
     let holder = new Generator(options);
-    return holder.gen();
-    // let r=holder.gen();console.log(r);return r;
+    if (Cdkey.debug) {
+        let r = holder.gen();
+        Cdkey.debug(r);
+        return r;
+    } else {
+        return holder.gen();
+    }
 };
 Cdkey.syntax = () => syntax;
+Cdkey.debug = false;
 
 Cdkey.ALPHANUMERIC = Option.ALPHANUMERIC;
 Cdkey.ALPHABETIC = Option.ALPHABETIC;

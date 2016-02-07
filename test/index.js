@@ -5,17 +5,21 @@
 const expect = require('chai').expect;
 const cdkey = require('../index.js');
 
-describe('basic', () => {
+cdkey.debug = r => {
+    console.log(r);
+};
+
+describe('basic usage', () => {
     let length = 19;
     let regex = /[^0-9a-zA-Z-]/g;
-    it('generate one', () => {
+    it('cdkey()', () => {
         let str = cdkey();
         expect(str).to.be.a('string');
         expect(str.length).to.equal(length);
         let search = str.search(regex);
         expect(search).to.equal(-1);
     });
-    it('generate multi', () => {
+    it('cdkey(2)', () => {
         let amount = 2;
         let list = cdkey(amount);
         expect(list).to.be.a('array');
@@ -27,7 +31,7 @@ describe('basic', () => {
             expect(search).to.equal(-1);
         });
     });
-    it('generate limit length', () => {
+    it('cdkey(8, 2)', () => {
         let length = 8;
         let amount = 2;
         let list = cdkey(amount, length);
@@ -42,33 +46,92 @@ describe('basic', () => {
     });
 });
 
-describe('assign build in type', () => {
+describe('basic template usage', () => {
+    let excludes = /[0OIl]/g;
     [
-        [cdkey.ALPHANUMERIC, /[^0-9A-Za-z]/g],
-        [cdkey.ALPHABETIC, /[^A-Za-z]/g],
-        [cdkey.NUMERIC, /[^0-9]/g],
-        [cdkey.NUMBER, /[^0-9]/g],
-        [cdkey.UPPER, /[^A-Z]/g],
-        [cdkey.LOWER, /[^a-z]/g],
-        [cdkey.HEX, /[^0-9ABCDEF]/g],
-        [cdkey.DIABLO, /[^0-9A-Za-z-]/g],
+        ['0000', /[^0-9]/g],
+        ['AAAA', /[^A-Z]/g],
+        ['aaaa', /[^a-z]/g],
+        ['XXXX', /[^0-9A-Z]/g],
+        ['xxxx', /[^0-9a-z]/g],
+        ['????', /[^0-9A-Za-z]/g],
     ].forEach((row) => {
-        let option = row[0];
+        let template = row[0];
+        let regex = row[1];
+        it('cdkey(' + template + ')', () => {
+            let str = cdkey(template);
+            expect(str).to.be.a('string');
+            expect(str.length).to.equal(template.length);
+            expect(str.search(regex)).to.equal(-1);
+            expect(str.search(excludes)).to.equal(-1);
+        });
+        let amount = 2;
+        it('cdkey(' + template + ', ' + amount + ')', () => {
+            let list = cdkey(template, amount);
+            expect(list).to.be.a('array');
+            expect(list.length).to.equal(amount);
+            list.forEach((str) => {
+                expect(str).to.be.a('string');
+                expect(str.length).to.equal(template.length);
+                expect(str.search(regex)).to.equal(-1);
+                expect(str.search(excludes)).to.equal(-1);
+            });
+        });
+    });
+});
+
+describe('custom template with custom syntax', () => {
+    let template = 'cccc';
+    let regex = /[^ABC]/g;
+    let syntax = {
+        'c': 'ABC'
+    };
+    it('cdkey(' + template + ', ' + JSON.stringify(syntax) + ')', () => {
+        let str = cdkey(template, syntax);
+        expect(str).to.be.a('string');
+        expect(str.length).to.equal(template.length);
+        expect(str.search(regex)).to.equal(-1);
+    });
+    let amount = 2;
+    it('cdkey(' + template + ', ' + amount + ', ' + JSON.stringify(syntax) + ')', () => {
+        let list = cdkey(template, amount, syntax);
+        expect(list).to.be.a('array');
+        expect(list.length).to.equal(amount);
+        list.forEach((str) => {
+            expect(str).to.be.a('string');
+            expect(str.length).to.equal(template.length);
+            expect(str.search(regex)).to.equal(-1);
+        });
+    });
+});
+
+describe('build in options (char + length)', () => {
+    [
+        ['cdkey.ALPHANUMERIC', cdkey.ALPHANUMERIC, /[^0-9A-Za-z]/g],
+        ['cdkey.ALPHABETIC', cdkey.ALPHABETIC, /[^A-Za-z]/g],
+        ['cdkey.NUMERIC', cdkey.NUMERIC, /[^0-9]/g],
+        ['cdkey.NUMBER', cdkey.NUMBER, /[^0-9]/g],
+        ['cdkey.UPPER', cdkey.UPPER, /[^A-Z]/g],
+        ['cdkey.LOWER', cdkey.LOWER, /[^a-z]/g],
+        ['cdkey.HEX', cdkey.HEX, /[^0-9ABCDEF]/g],
+    ].forEach((row) => {
+        let name = row[0];
+        let option = row[1];
         let length;
-        if(option.length){
+        if (option.length) {
             length = option.length;
-        }else if(option.template){
+        } else if (option.template) {
             length = option.template.length;
         }
-        let regex = row[1];
-        it('generate one by ' + option.char, () => {
+        let regex = row[2];
+        it('cdkey(' + name + ')', () => {
             let str = cdkey(option);
             expect(str).to.be.a('string');
             expect(str.length).to.equal(length);
             let search = str.search(regex);
             expect(search).to.equal(-1);
         });
-        it('generate multi by ' + option.char, () => {
+        it('cdkey(' + name + ', 2)', () => {
             let amount = 2;
             let list = cdkey(option, amount);
             expect(list).to.be.a('array');
@@ -80,7 +143,7 @@ describe('assign build in type', () => {
                 expect(search).to.equal(-1);
             });
         });
-        it('generate multi, limit length by ' + option.char, () => {
+        it('cdkey(' + name + ', 2, 8)', () => {
             let amount = 2;
             let length = 8;
             let list = cdkey(option, amount, length);
@@ -96,66 +159,42 @@ describe('assign build in type', () => {
     });
 });
 
-describe('assign template', () => {
-    let excludes = /[0OIl]/g;
+describe('build in options (template + syntax)', () => {
     [
-        ['0000', /[^0-9]/g],
-        ['AAAA', /[^A-Z]/g],
-        ['aaaa', /[^a-z]/g],
-        ['XXXX', /[^0-9A-Z]/g],
-        ['xxxx', /[^0-9a-z]/g],
-        ['????', /[^0-9A-Za-z]/g],
+        ['cdkey.DIABLO', cdkey.DIABLO, /[^0-9A-Za-z-]/g],
     ].forEach((row) => {
-        let template = row[0];
-        let regex = row[1];
-        it('generate one by ' + template, () => {
-            let str = cdkey(template);
+        let name = row[0];
+        let option = row[1];
+        let length;
+        if (option.length) {
+            length = option.length;
+        } else if (option.template) {
+            length = option.template.length;
+        }
+        let regex = row[2];
+        it('cdkey(' + name + ')', () => {
+            let str = cdkey(option);
             expect(str).to.be.a('string');
-            expect(str.length).to.equal(template.length);
-            expect(str.search(regex)).to.equal(-1);
-            expect(str.search(excludes)).to.equal(-1);
+            expect(str.length).to.equal(length);
+            let search = str.search(regex);
+            expect(search).to.equal(-1);
         });
-        it('generate multi by ' + template, () => {
+        it('cdkey(' + name + ', 2)', () => {
             let amount = 2;
-            let list = cdkey(template, amount);
+            let list = cdkey(option, amount);
             expect(list).to.be.a('array');
             expect(list.length).to.equal(amount);
             list.forEach((str) => {
                 expect(str).to.be.a('string');
-                expect(str.length).to.equal(template.length);
-                expect(str.search(regex)).to.equal(-1);
-                expect(str.search(excludes)).to.equal(-1);
+                expect(str.length).to.equal(length);
+                let search = str.search(regex);
+                expect(search).to.equal(-1);
             });
         });
     });
 });
 
-describe('assign template and syntax', () => {
-    let template = '????';
-    let regex = /[^ABC]/g;
-    let syntax = {
-        '?': 'ABC'
-    };
-    it('generate one by ' + template + ' syntax ' + syntax['?'], () => {
-        let str = cdkey(template, syntax);
-        expect(str).to.be.a('string');
-        expect(str.length).to.equal(template.length);
-        expect(str.search(regex)).to.equal(-1);
-    });
-    it('generate multi by ' + template + ' syntax ' + syntax['?'], () => {
-        let amount = 2;
-        let list = cdkey(template, amount, syntax);
-        expect(list).to.be.a('array');
-        expect(list.length).to.equal(amount);
-        list.forEach((str) => {
-            expect(str).to.be.a('string');
-            expect(str.length).to.equal(template.length);
-            expect(str.search(regex)).to.equal(-1);
-        });
-    });
-});
-
-describe('fluent basic', () => {
+describe('fluent mode (char + length)', () => {
     let char = 'ABC';
     let length = 8;
     let regex = /[^ABC]/g;
@@ -185,13 +224,13 @@ describe('fluent basic', () => {
     });
 });
 
-describe('fluent template', () => {
+describe('fluent mode (template + syntax)', () => {
     let template = '????';
     let regex = /[^ABC]/g;
     let syntax = {
         '?': 'ABC'
     };
-    it('generate one by ' + template + ' syntax ' + syntax['?'], () => {
+    it('generate one by ' + template + ' syntax ' + JSON.stringify(syntax), () => {
         let str = cdkey(true)
             .template(template)
             .syntax(syntax)
@@ -200,7 +239,7 @@ describe('fluent template', () => {
         expect(str.length).to.equal(template.length);
         expect(str.search(regex)).to.equal(-1);
     });
-    it('generate multi by ' + template + ' syntax ' + syntax['?'], () => {
+    it('generate multi by ' + template + ' syntax ' + JSON.stringify(syntax), () => {
         let amount = 2;
         let list = cdkey(true)
             .template(template)
@@ -217,11 +256,11 @@ describe('fluent template', () => {
     });
 });
 
-describe('endless control', () => {
+describe('endless loop limitation', () => {
     let template = '0'; // 123456789
     let amount = 10;
     let regex = /[^0-9]/g;
-    it('generate multi by ' + template, () => {
+    it('cdkey(' + template + ', ' + amount + ')', () => {
         let list = cdkey(template, amount); // [ '3', '5', '9', '7', '4', '2', '8', '6', '1' ]
         expect(list).to.be.a('array');
         expect(list.length).to.equal(9);
