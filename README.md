@@ -2,18 +2,23 @@
 
 <!-- TODO add travis-ci -->
 
+generate the random string by template.
+
 ## Installation
 
 ```sh
 npm install cdkey --save
 ```
 
-## Basic Usage
+## Usage
+
+### basic usage
+
+it's ok to use custom template with custom syntax.
 
 ```javascript
-cdkey([object options], [number amount], [string template|number length]);
+cdkey([string template], [number amount], [object syntax]);
 ```
-
 
 ```javascript
 'use strict';
@@ -25,26 +30,6 @@ cdkey();
 cdkey(2);
 // [ 'kcsi-V5xR-1xv8-zq7q', 'cumh-jYVn-5vL9-mwLM' ]
 
-cdkey(2, 'aaaa');
-// [ 'wbhv', 'shuw' ]
-
-cdkey(cdkey.NUMBER);
-// 22030189956236488846744098007707
-
-cdkey(cdkey.NUMBER, 2);
-// [ '19683894730515804657548823714127', '21866105460848814223897519145505' ]
-
-cdkey(cdkey.NUMBER, 2, 8);
-// [ '05250373', '42852368' ]
-```
-
-## Template usage
-
-```javascript
-cdkey([string template], [number amount], [object syntax]);
-```
-
-```javascript
 cdkey('XXXX');
 // 7F3K
 
@@ -56,25 +41,126 @@ cdkey('AAAA', {
 });
 // ABBA
 
-cdkey('aaaa', 2, {
-  a: 'ABC'
+cdkey('cccc', 2, {
+  c: 'ABC'
 });
 // [ 'BCAA', 'ACAB' ]
+```
+
+###### default syntax
+
+|syntax|chars|
+|---|---|
+|`0`|[0-9] - [0]|
+|`A`|[A-Z] - [OI]|
+|`a`|[a-z] - [l]|
+|`X`|[0-9] + [A-Z] - [0OI]|
+|`x`|[0-9] + [a-z] - [0l]|
+|`?`|[0-9] + [A-Z] + [a-z] - [0OIl]|
+
+```javascript
+// to get default syntax object.
+cdkey.syntax();
+```
+
+### option mode
+
+char + length or template + syntax
+
+the 2ed argument can override amount.
+
+the 3rd argument can override template or length.
+
+```javascript
+cdkey([object options], [number amount, [string template|number length]]);
+```
+
+```javascript
+cdkey({
+  char: 'abc',
+  length: 4
+});
+// acab
+
+cdkey({
+  template: 'aaaa',
+  syntax: {
+    a: '012'
+  },
+  amount: 2
+});
+// [ "1220", "2001" ]
+
+cdkey({
+  template: '0000',
+  syntax: {
+    a: '012'
+  },
+  amount: 2
+}, 2, 'aaaa');
+// [ "1220", "2001" ]
+```
+
+###### options
+
+|attribute|type|description|
+|---|---|---|
+|char|string||
+|length|number||
+|template|string||
+|syntax|object||
+|amount|number||
+
+#### build in options
+
+cdkey.`?`
+
+###### char + length style
+
+default length is 32.
+
+- `ALPHANUMERIC` - [0-9 a-z A-Z]
+- `ALPHABETIC` - [a-z A-Z]
+- `NUMBER` - [0-9]
+- `NUMERIC` - same as cdkey.NUMBER
+- `UPPER` - [A-Z]
+- `LOWER` - [a-z]
+- `HEX` - [0-9 A-F]
+
+###### template + syntax style
+
+- `DEFAULT` - '????-????-????-????'
+- `DIABLE` - 'XXXX-XXXX-XXXX-XXXX'
+
+```javascript
+
+cdkey(cdkey.NUMBER);
+// 22030189956236488846744098007707
+
+cdkey(cdkey.NUMBER, 2, 8);
+// [ '05250373', '42852368' ]
 
 cdkey(cdkey.DIABLE, 2);
 // [ '2F2L-HJTG-P4L6-QBTZ', 'F1XM-K9JZ-ED9L-EPL9' ]
 ```
 
-## Fluent mode
+### Fluent mode
+
+similar options usage.
 
 ```javascript
-cdkey(true);
-    .method(value)
-    .method(value)
+cdkey(true)
+    [.method(param)]
     .gen();
 ```
 
 ```javascript
+cdkey(true)
+  .char('012')
+  .length(8)
+  .gen();
+// 01201002
+
 cdkey(true)
   .template('AAAA')
   .syntax({
@@ -85,48 +171,15 @@ cdkey(true)
 // [ 'BCAA', 'ACAB' ]
 ```
 
-|group|method|param type|
-|---|---|---|
-|template|template|string|
-|template|syntax|object|
-|basic|char|string|
-|basic|length|number|
-||amount|number|
+###### methods
 
-### build in options
-
-cdkey.`?`
-
-###### basic style
-
-- `ALPHANUMERIC` - [0-9 a-z A-Z]
-- `ALPHABETIC` - [a-z A-Z]
-- `NUMBER` - [0-9]
-- `NUMERIC` - same as cdkey.NUMBER
-- `UPPER` - [A-Z]
-- `LOWER` - [a-z]
-- `HEX` - [0-9 A-F]
-
-###### template style
-
-- `DEFAULT` - '????-????-????-????'
-- `DIABLE` - 'XXXX-XXXX-XXXX-XXXX'
-
-### default syntax
-
-```javascript
-// get default syntax object.
-cdkey.syntax();
-```
-
-|syntax|chars|
+|method|param type|
 |---|---|
-|`0`|0-9|
-|`A`|A-Z|
-|`a`|a-z|
-|`X`|0-9 + A-Z - 0OI|
-|`x`|0-9 + a-z - 0l|
-|`?`|0-9 + a-z + A-z - 0OIl|
+|char|string|
+|length|number|
+|template|string|
+|syntax|object|
+|amount|number|
 
 ## Tests
 
