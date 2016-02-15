@@ -64,6 +64,9 @@ class Generator {
         let index = _.random(0, str.length - 1);
         return str[index];
     };
+    generate(){
+        return this.gen();
+    };
     gen() {
         let result = [];
         let keygen;

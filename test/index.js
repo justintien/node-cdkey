@@ -80,7 +80,7 @@ describe('basic template usage', () => {
     });
 });
 
-describe('custom template with custom syntax', () => {
+describe('basic template with custom syntax', () => {
     let template = 'cccc';
     let regex = /[^ABC]/g;
     let syntax = {
@@ -105,7 +105,7 @@ describe('custom template with custom syntax', () => {
     });
 });
 
-describe('build in options (char + length)', () => {
+describe('build in options (char + length style)', () => {
     [
         ['cdkey.ALPHANUMERIC', cdkey.ALPHANUMERIC, /[^0-9A-Za-z]/g],
         ['cdkey.ALPHABETIC', cdkey.ALPHABETIC, /[^A-Za-z]/g],
@@ -159,7 +159,7 @@ describe('build in options (char + length)', () => {
     });
 });
 
-describe('build in options (template + syntax)', () => {
+describe('build in options (template + syntax style)', () => {
     [
         ['cdkey.DIABLO', cdkey.DIABLO, /[^0-9A-Za-z-]/g],
     ].forEach((row) => {
@@ -194,7 +194,22 @@ describe('build in options (template + syntax)', () => {
     });
 });
 
-describe('fluent mode (char + length)', () => {
+describe('fluent mode methods', () => {
+    let char = 'ABC';
+    let length = 8;
+    let regex = /[^ABC]/g;
+    it('method generate is same as gen.', () => {
+        let str = cdkey(true)
+            .length(length)
+            .char(char)
+            .generate();
+        expect(str).to.be.a('string');
+        expect(str.length).to.equal(length);
+        expect(str.search(regex)).to.equal(-1);
+    });
+});
+
+describe('fluent mode (char + length style)', () => {
     let char = 'ABC';
     let length = 8;
     let regex = /[^ABC]/g;
@@ -224,7 +239,7 @@ describe('fluent mode (char + length)', () => {
     });
 });
 
-describe('fluent mode (template + syntax)', () => {
+describe('fluent mode (template + syntax style)', () => {
     let template = '????';
     let regex = /[^ABC]/g;
     let syntax = {

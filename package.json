@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/up9cloud/node-cdkey#readme",
   "engines": {
-    "node": ">=5.5.0"
+    "node": ">=4.2.6"
   },
   "devDependencies": {
     "chai": "^3.5.0",

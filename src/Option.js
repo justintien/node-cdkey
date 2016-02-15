@@ -3,6 +3,7 @@ const constant = require('./constant.js');
 const syntax = require('./syntax.js');
 
 class Option {
+    // char length style
     static get ALPHANUMERIC() {
         return {
             length: 32,
@@ -42,6 +43,7 @@ class Option {
             char: constant.number + 'ABCDEF'
         };
     };
+    // template style
     static get DEFAULT() {
         return {
             template: '????-????-????-????',

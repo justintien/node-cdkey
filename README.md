@@ -12,10 +12,8 @@ npm install cdkey --save
 
 ### basic usage
 
-it's ok to use custom template with custom syntax.
-
 ```javascript
-cdkey([string template], [number amount], [object syntax]);
+cdkey([number amount]);
 ```
 
 ```javascript
@@ -27,22 +25,12 @@ cdkey();
 
 cdkey(2);
 // [ 'kcsi-V5xR-1xv8-zq7q', 'cumh-jYVn-5vL9-mwLM' ]
+```
 
-cdkey('XXXX');
-// 7F3K
+### template usage
 
-cdkey('????', 2);
-// [ 'cUwc', 'n9zu' ]
-
-cdkey('AAAA', {
-  A: 'AB'
-});
-// ABBA
-
-cdkey('cccc', 2, {
-  c: 'ABC'
-});
-// [ 'BCAA', 'ACAB' ]
+```javascript
+cdkey([string template], [number amount], [object syntax]);
 ```
 
 ###### default syntax
@@ -57,21 +45,51 @@ cdkey('cccc', 2, {
 |`?`|[0-9] + [A-Z] + [a-z] - [0OIl]|
 
 ```javascript
+cdkey('XXXX');
+// 7F3K
+
+cdkey('????', 2);
+// [ 'cUwc', 'n9zu' ]
+
 // to get default syntax object.
 cdkey.syntax();
 ```
 
+###### custom syntax
+
+```javascript
+cdkey('AAAA', {
+  A: 'AB'
+});
+// ABBA
+
+cdkey('cccc', 2, {
+  c: 'ABC'
+});
+// [ 'BCAA', 'ACAB' ]
+```
+
 ### option mode
-
-char + length or template + syntax
-
-the 2ed argument can override amount.
-
-the 3rd argument can override template or length.
 
 ```javascript
 cdkey([object options], [number amount, [string template|number length]]);
 ```
+
+amount will override options.amount.
+
+the 3rd argument will override template or length (depand on style).
+
+###### options
+
+|attribute|type|description|
+|---|---|---|
+|char|string||
+|length|number||
+|template|string||
+|syntax|object||
+|amount|number|default 1|
+
+###### char + length style
 
 ```javascript
 cdkey({
@@ -80,6 +98,17 @@ cdkey({
 });
 // acab
 
+cdkey({
+  char: 'abc',
+  length: 4,
+  amount: 2
+}, 1, 3);
+// aca
+```
+
+###### template + syntax
+
+```javascript
 cdkey({
   template: 'aaaa',
   syntax: {
@@ -94,28 +123,16 @@ cdkey({
   syntax: {
     a: '012'
   },
-  amount: 2
+  amount: 5
 }, 2, 'aaaa');
 // [ "1220", "2001" ]
 ```
-
-###### options
-
-|attribute|type|description|
-|---|---|---|
-|char|string||
-|length|number||
-|template|string||
-|syntax|object||
-|amount|number||
 
 #### build in options
 
 cdkey.`?`
 
-###### char + length style
-
-default length is 32.
+###### char + length style (default length is 32.)
 
 - `ALPHANUMERIC` - [0-9 a-z A-Z]
 - `ALPHABETIC` - [a-z A-Z]
@@ -128,29 +145,40 @@ default length is 32.
 ###### template + syntax style
 
 - `DEFAULT` - '????-????-????-????'
-- `DIABLE` - 'XXXX-XXXX-XXXX-XXXX'
+- `DIABLO` - 'XXXX-XXXX-XXXX-XXXX'
+
+###### char + length style
 
 ```javascript
-
 cdkey(cdkey.NUMBER);
 // 22030189956236488846744098007707
 
 cdkey(cdkey.NUMBER, 2, 8);
 // [ '05250373', '42852368' ]
+```
 
-cdkey(cdkey.DIABLE, 2);
+###### template + syntax style
+
+```javascript
+cdkey(cdkey.DIABLO, 2);
 // [ '2F2L-HJTG-P4L6-QBTZ', 'F1XM-K9JZ-ED9L-EPL9' ]
 ```
 
 ### Fluent mode
-
-similar options usage.
 
 ```javascript
 cdkey(true)
     [.method(param)]
     .gen();
 ```
+
+|method|param type|
+|---|---|
+|char|string|
+|length|number|
+|template|string|
+|syntax|object|
+|amount|number|
 
 ```javascript
 cdkey(true)
@@ -169,16 +197,6 @@ cdkey(true)
 // [ 'BCAA', 'ACAB' ]
 ```
 
-###### methods
-
-|method|param type|
-|---|---|
-|char|string|
-|length|number|
-|template|string|
-|syntax|object|
-|amount|number|
-
 ## Tests
 
 ```
@@ -190,4 +208,3 @@ npm test
 - escape string in template.
 - command line support.
 - browser support.
-- debug output.
