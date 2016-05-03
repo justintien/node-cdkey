@@ -30,19 +30,19 @@ cdkey(2);
 ### template usage
 
 ```javascript
-cdkey([string template], [number amount], [object syntax]);
+cdkey(string template, [number amount], [object syntax]);
 ```
 
 ###### default syntax
 
-|syntax|chars|
-|---|---|
-|`0`|[0-9] - [0]|
-|`A`|[A-Z] - [OI]|
-|`a`|[a-z] - [l]|
-|`X`|[0-9] + [A-Z] - [0OI]|
-|`x`|[0-9] + [a-z] - [0l]|
-|`?`|[0-9] + [A-Z] + [a-z] - [0OIl]|
+|syntax|basic chars|without chars|
+|---|---|---|
+|`0`|[0-9]|[0]|
+|`A`|[A-Z]|[OI]|
+|`a`|[a-z]|[l]|
+|`X`|[0-9] + [A-Z]|[0OI]|
+|`x`|[0-9] + [a-z]|[0l]|
+|`?`|[0-9] + [A-Z] + [a-z]|[0OIl]|
 
 ```javascript
 cdkey('XXXX');
@@ -72,7 +72,7 @@ cdkey('cccc', 2, {
 ### option mode
 
 ```javascript
-cdkey([object options], [number amount, [string template|number length]]);
+cdkey(object options, [number amount, [string template|number length]]);
 ```
 
 amount will override options.amount.
@@ -208,3 +208,9 @@ npm test
 - escape string in template.
 - command line support.
 - browser support.
+
+## License
+
+[MIT][LICENSE]
+
+[LICENSE]: LICENSE
