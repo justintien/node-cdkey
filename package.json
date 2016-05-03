@@ -1,6 +1,6 @@
 {
   "name": "cdkey",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "generate random strings by template.",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "url": "https://github.com/up9cloud/node-cdkey/issues"
   },
   "homepage": "https://github.com/up9cloud/node-cdkey#readme",
+  "readmeFilename": "README.md",
   "engines": {
     "node": ">=4.2.6"
   },
