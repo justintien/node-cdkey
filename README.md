@@ -35,14 +35,16 @@ cdkey(string template, [number amount], [object syntax]);
 
 ###### default syntax
 
-|syntax|basic chars|without chars|
+exclude non-readable chars
+
+|syntax|basic chars|exclude chars|
 |---|---|---|
-|`0`|[0-9]|[0]|
+|`0`|[0-9]|[01]|
 |`A`|[A-Z]|[OI]|
 |`a`|[a-z]|[l]|
-|`X`|[0-9] + [A-Z]|[0OI]|
-|`x`|[0-9] + [a-z]|[0l]|
-|`?`|[0-9] + [A-Z] + [a-z]|[0OIl]|
+|`X`|[0-9] + [A-Z]|[01OI]|
+|`x`|[0-9] + [a-z]|[01l]|
+|`?`|[0-9] + [A-Z] + [a-z]|[01OIl]|
 
 ```javascript
 cdkey('XXXX');

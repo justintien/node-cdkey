@@ -47,7 +47,7 @@ describe('basic usage', () => {
 });
 
 describe('basic template usage', () => {
-    let excludes = /[0OIl]/g;
+    let excludes = /[0O1Il]/g;
     [
         ['0000', /[^0-9]/g],
         ['AAAA', /[^A-Z]/g],
@@ -272,13 +272,13 @@ describe('fluent mode (template + syntax style)', () => {
 });
 
 describe('endless loop limitation', () => {
-    let template = '0'; // 123456789
+    let template = '0'; // 23456789
     let amount = 10;
     let regex = /[^0-9]/g;
     it('cdkey(' + template + ', ' + amount + ')', () => {
-        let list = cdkey(template, amount); // [ '3', '5', '9', '7', '4', '2', '8', '6', '1' ]
+        let list = cdkey(template, amount); // [ '3', '5', '9', '7', '4', '2', '8', '6' ]
         expect(list).to.be.a('array');
-        expect(list.length).to.equal(9);
+        expect(list.length).to.equal(8);
         list.forEach((str) => {
             expect(str).to.be.a('string');
             expect(str.length).to.equal(template.length);

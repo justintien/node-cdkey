@@ -2,7 +2,7 @@
 
 const constant = require('./constant.js');
 
-let charsExcludes = '0OIl';
+let charsExcludes = '0O1Il';
 let excludes = new RegExp('[' + charsExcludes + ']', 'g');
 
 let numbers = constant.number.replace(excludes, '');
