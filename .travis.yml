@@ -2,8 +2,7 @@ language: node_js
 node_js:
   - "4"
   - "6"
-before_script:
-  - npm install -g npm@'>=3'
 deploy:
   provider: npm
+  email: up9cloud.net@gmail.com
   api_key: "$YOUR_API_KEY"
