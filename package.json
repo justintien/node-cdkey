@@ -17,7 +17,10 @@
     "template",
     "keygen"
   ],
-  "author": "ss-t.c",
+  "author": {
+    "name" : "Chen Jia-Hsuan",
+    "email" : "up9cloud.net@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/up9cloud/node-cdkey/issues"
