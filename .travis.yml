@@ -7,5 +7,5 @@ after_success:
   - npm run coverage
 deploy:
   provider: npm
-  email: up9cloud.net@gmail.com
+  email: "$YOUR_EMAIL_ADDRESS"
   api_key: "$YOUR_API_KEY"
